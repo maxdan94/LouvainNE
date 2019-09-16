@@ -2,7 +2,6 @@
 ## Info:
 
 Feel free to use these lines as you wish.
-Computes graph cut recursively in order to obtain an ordering of the nodes
 
 ## To compile:
 
@@ -19,6 +18,6 @@ option "bisection": the bisection algorithm to use, default is 0.
 
 ## Initial contributor:
 Maximilien Danisch  
-April 2019  
+September 2019  
 http://bit.ly/danisch  
 maximilien.danisch@gmail.com
