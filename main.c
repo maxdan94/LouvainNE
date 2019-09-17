@@ -7,7 +7,8 @@
 #include "partition.h"
 #include "struct.h"
 
-#define NLINKS 100000000 //maximum number of edges for memory allocation, will increase if needed
+#define NLINKS 100000000 //maximum number of edges of the input graph: used for memory allocation, will increase if needed
+#define NLINKS2 8 //maximum number of edges of a subgraph: used for memory allocation, will increase if needed
 
 //compute the maximum of three unsigned long
 inline unsigned long max3(unsigned long a,unsigned long b,unsigned long c){
@@ -121,7 +122,7 @@ adjlist** mkkids(adjlist* g, unsigned* lab, unsigned nlab){
 		clust[i]=malloc(sizeof(adjlist));
 		clust[i]->edges=malloc(NLINKS*sizeof(edge));
 		clust[i]->e=0;
-		clust[i]->emax=NLINKS;
+		clust[i]->emax=NLINKS2;
 	}
 
 	for (i=0;i<g->e;i++) {
@@ -129,7 +130,7 @@ adjlist** mkkids(adjlist* g, unsigned* lab, unsigned nlab){
 			j=lab[g->edges[i].s];
 			clust[j]->edges[clust[j]->e]=g->edges[i];
 			if (clust[j]->e++==clust[j]->emax) {
-				clust[j]->emax+=NLINKS;
+				clust[j]->emax*=2;
 				clust[j]->edges=realloc(clust[j]->edges,clust[j]->emax*sizeof(edge));
 			}
 		}
