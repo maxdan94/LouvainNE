@@ -9,11 +9,11 @@ Feel free to use these lines as you wish.
 
 ## To execute:
 
-"./recpart edgelist.txt res.txt [bisection]"
+"./recpart edgelist.txt res.txt [partition]"
 - "edgelist.txt" should contain an undirected unweighted graph: one edge on each line (two unsigned long (nodes' ID)) separated by a space.
 - "res.txt": will contain the resulting tree.
 
-option "bisection": the bisection algorithm to use, default is 0.
+option "partition": the bisection algorithm to use, default is 0.
 - 0: random bisection
 
 ## Initial contributor:

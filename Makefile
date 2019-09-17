@@ -5,11 +5,11 @@ EXEC=main
 
 all: $(EXEC)
 
-main: bisection.o main.o
-	$(CC) -o recpart bisection.o main.o $(CFLAGS)
+main: partition.o main.o
+	$(CC) -o recpart partition.o main.o $(CFLAGS)
 
-bisection.o: bisection.c
-	$(CC) -o bisection.o -c bisection.c $(CFLAGS)
+bisection.o: partition.c
+	$(CC) -o partition.o -c partition.c $(CFLAGS)
 
 main.o: main.c
 	$(CC) -o main.o -c main.c $(CFLAGS)

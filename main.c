@@ -4,7 +4,7 @@
 #include <strings.h>//to use "bzero"
 #include <time.h>//to estimate the runing time
 
-#include "bisection.h"
+#include "partition.h"
 #include "struct.h"
 
 #define NLINKS 100000000 //maximum number of edges for memory allocation, will increase if needed
@@ -41,7 +41,7 @@ adjlist* readedgelist(char* input){
 }
 
 
-//assign new contiguous labels from 0 to n-1
+//relabel the nodes with contiguous labels from 0 to n-1
 unsigned long* relabel(adjlist* g){
 	unsigned long i;
 	unsigned long *new=malloc(g->n*sizeof(unsigned long));
@@ -112,7 +112,7 @@ void free_adjlist(adjlist *g){
 }
 
 
-//Make the 2 subgraphs of graph g using the labels "lab"
+//Make the nlab subgraphs of graph g using the labels "lab"
 adjlist** mkkids(adjlist* g, unsigned* lab, unsigned nlab){
 	unsigned long i,j;
 
@@ -163,18 +163,9 @@ adjlist** mkkids(adjlist* g, unsigned* lab, unsigned nlab){
 	return clust;
 }
 
-//printing line (corresponding to one tree's node and associated set of nodes) in file
-void printres(unsigned long n, unsigned long *map, char* output){
-	unsigned long u;
-	FILE* file=fopen(output,"w");
-	for (u=0;u<n;u++){
-		fprintf(file,"%lu %lu\n",u,map[u]);
-	}
-	fclose(file);
-}
 
 //recursive function
-void recurs(bisection bisec, adjlist* g, unsigned h, FILE* file){
+void recurs(partition part, adjlist* g, unsigned h, FILE* file){
 	unsigned nlab,i;
 	if (g->e==0){
 		fprintf(file,"%u 1 %lu",h,g->n);
@@ -186,7 +177,7 @@ void recurs(bisection bisec, adjlist* g, unsigned h, FILE* file){
 	}
 	else{
 		unsigned *lab=malloc(g->n*sizeof(unsigned));
-		nlab=bisec(g,lab);
+		nlab=part(g,lab);
 		if (nlab==1){
 			fprintf(file,"%u 1 %lu",h,g->n);
 			for (i=0;i<g->n;i++){
@@ -202,16 +193,17 @@ void recurs(bisection bisec, adjlist* g, unsigned h, FILE* file){
 			free_adjlist(g);
 			free(lab);
 			for (i=0;i<nlab;i++){
-				recurs(bisec, clust[i],h+1,file);
+				recurs(part, clust[i],h+1,file);
 			}
 		}
 	}
 }
 
+
 //main function
 int main(int argc,char** argv){
 	adjlist* g;
-	bisection bisec;
+	partition part;
 	unsigned long n;
 	unsigned long *map,*new;
 
@@ -219,9 +211,9 @@ int main(int argc,char** argv){
 	srand(time(NULL));
 
 	if (argc==3)
-		bisec=choosebisection("0");
+		part=choose_partition("0");
 	else if (argc==4)
-		bisec=choosebisection(argv[3]);
+		part=choose_partition(argv[3]);
 	else{
 		printf("Command line arguments are not valid.\n");
 		exit(1);
@@ -242,7 +234,7 @@ int main(int argc,char** argv){
 	printf("Starting recursive bisections\n");
 	printf("Prints resulting order in file %s\n",argv[2]);
 	FILE* file=fopen(argv[2],"w");
-	recurs(bisec, g, 0, file);
+	recurs(part, g, 0, file);
 	fclose(file);
 	t2=time(NULL);
 
