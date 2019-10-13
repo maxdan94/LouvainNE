@@ -193,7 +193,7 @@ void recurs(partition part, adjlist* g, unsigned h, FILE* file){
 		}
 		else{
 			adjlist** clust=mkkids(g,lab,nlab);
-			fprintf(file,"%u %u\n",h,nlab);
+			fprintf(file,"%u %lu\n",h,nlab);
 			free_adjlist(g);
 			free(lab);
 			for (i=0;i<nlab;i++){
