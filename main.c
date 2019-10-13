@@ -236,7 +236,7 @@ int main(int argc,char** argv){
 	printf("Number of edges: %llu\n",g->e);
 
 	printf("Starting recursive bisections\n");
-	printf("Prints resulting order in file %s\n",argv[2]);
+	printf("Prints result in file %s\n",argv[2]);
 	FILE* file=fopen(argv[2],"w");
 	recurs(part, g, 0, file);
 	fclose(file);
