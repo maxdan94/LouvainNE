@@ -18,7 +18,7 @@ inline unsigned long max3(unsigned long a,unsigned long b,unsigned long c){
 
 //reading the edgelist from file
 adjlist* readedgelist(char* input){
-	unsigned long e1=NLINKS;
+	unsigned long long e1=NLINKS;
 	adjlist *g=malloc(sizeof(adjlist));
 	FILE *file;
 
@@ -44,7 +44,7 @@ adjlist* readedgelist(char* input){
 
 //relabel the nodes with contiguous labels from 0 to n-1
 unsigned long* relabel(adjlist* g){
-	unsigned long i;
+	unsigned long long i;
 	unsigned long *new=malloc(g->n*sizeof(unsigned long));
 	bool *b=calloc(g->n,sizeof(bool));
 
@@ -69,7 +69,8 @@ unsigned long* relabel(adjlist* g){
 
 //building the adjacency matrix
 void mkadjlist(adjlist* g,unsigned long* new){
-	unsigned long i,u,v;
+	unsigned long long i;
+	unsigned long u,v;
 	unsigned long *d=calloc(g->n,sizeof(unsigned long));
 
 	for (i=0;i<g->e;i++) {
@@ -82,7 +83,7 @@ void mkadjlist(adjlist* g,unsigned long* new){
 		d[g->edges[i].t]++;
 	}
 
-	g->cd=malloc((g->n+1)*sizeof(unsigned long));
+	g->cd=malloc((g->n+1)*sizeof(unsigned long long));
 	g->cd[0]=0;
 	for (i=1;i<g->n+1;i++) {
 		g->cd[i]=g->cd[i-1]+d[i-1];
@@ -114,8 +115,9 @@ void free_adjlist(adjlist *g){
 
 
 //Make the nlab subgraphs of graph g using the labels "lab"
-adjlist** mkkids(adjlist* g, unsigned* lab, unsigned nlab){
-	unsigned long i,j;
+adjlist** mkkids(adjlist* g, unsigned long* lab, unsigned long nlab){
+	unsigned long i;
+	unsigned long long j;
 
 	adjlist** clust=malloc(nlab*sizeof(adjlist*));
 	for (i=0;i<nlab;i++){
@@ -125,13 +127,13 @@ adjlist** mkkids(adjlist* g, unsigned* lab, unsigned nlab){
 		clust[i]->emax=NLINKS2;
 	}
 
-	for (i=0;i<g->e;i++) {
-		if (lab[g->edges[i].s]==lab[g->edges[i].t]){
-			j=lab[g->edges[i].s];
-			clust[j]->edges[clust[j]->e]=g->edges[i];
-			if (clust[j]->e++==clust[j]->emax) {
-				clust[j]->emax*=2;
-				clust[j]->edges=realloc(clust[j]->edges,clust[j]->emax*sizeof(edge));
+	for (j=0;j<g->e;j++) {
+		if (lab[g->edges[j].s]==lab[g->edges[j].t]){
+			i=lab[g->edges[j].s];
+			clust[i]->edges[clust[i]->e]=g->edges[j];
+			if (clust[i]->e++==clust[i]->emax) {
+				clust[i]->emax*=2;
+				clust[i]->edges=realloc(clust[i]->edges,clust[i]->emax*sizeof(edge));
 			}
 		}
 	}
@@ -167,7 +169,8 @@ adjlist** mkkids(adjlist* g, unsigned* lab, unsigned nlab){
 
 //recursive function
 void recurs(partition part, adjlist* g, unsigned h, FILE* file){
-	unsigned nlab,i;
+	unsigned long nlab;
+	unsigned long i;
 	if (g->e==0){
 		fprintf(file,"%u 1 %lu",h,g->n);
 		for (i=0;i<g->n;i++){
@@ -177,7 +180,7 @@ void recurs(partition part, adjlist* g, unsigned h, FILE* file){
 		free_adjlist(g);
 	}
 	else{
-		unsigned *lab=malloc(g->n*sizeof(unsigned));
+		unsigned long *lab=malloc(g->n*sizeof(unsigned long));
 		nlab=part(g,lab);
 		if (nlab==1){
 			fprintf(file,"%u 1 %lu",h,g->n);
@@ -230,7 +233,7 @@ int main(int argc,char** argv){
 	n=g->n;
 
 	printf("Number of nodes: %lu\n",g->n);
-	printf("Number of edges: %lu\n",g->e);
+	printf("Number of edges: %llu\n",g->e);
 
 	printf("Starting recursive bisections\n");
 	printf("Prints resulting order in file %s\n",argv[2]);

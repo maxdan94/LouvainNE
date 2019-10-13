@@ -7,7 +7,7 @@
 #include <stdio.h>
 #include <string.h>
 
-typedef unsigned (*partition)(adjlist*,unsigned*);
+typedef unsigned long (*partition)(adjlist*,unsigned long*);
 partition choose_partition(char*);
 
 #endif

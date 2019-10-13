@@ -3,9 +3,9 @@
 #define K 5
 
 //generating n random labels (boolean values)
-unsigned init(adjlist *g,unsigned *lab){
+unsigned long init(adjlist *g,unsigned long *lab){
 	unsigned long i,n=g->n;
-	unsigned nlab=(K>n)?n:K;
+	unsigned long nlab=(K>n)?n:K;
 
 	//random side for each node:
 	for (i=0;i<n;i++){
