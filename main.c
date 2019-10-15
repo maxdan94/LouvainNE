@@ -211,7 +211,7 @@ int main(int argc,char** argv){
 	unsigned long n;
 	unsigned long *map,*new;
 
-	time_t t1=time(NULL),t2;
+	time_t t0=time(NULL),t1,t2;
 	srand(time(NULL));
 
 	if (argc==3)
@@ -225,7 +225,8 @@ int main(int argc,char** argv){
 
 	printf("Reading edgelist from file %s\n",argv[1]);
 	g=readedgelist(argv[1]);
-
+	t1=time(NULL);
+	printf("- Time = %ldh%ldm%lds\n",(t1-t0)/3600,((t1-t0)%3600)/60,((t1-t0)%60));
 	printf("Building adjacency array\n");
 	new=relabel(g);
 	mkadjlist(g,new);
@@ -234,15 +235,17 @@ int main(int argc,char** argv){
 
 	printf("Number of nodes: %lu\n",g->n);
 	printf("Number of edges: %llu\n",g->e);
-
+	t2=time(NULL);
+	printf("- Time = %ldh%ldm%lds\n",(t2-t1)/3600,((t2-t1)%3600)/60,((t2-t1)%60));
+	
 	printf("Starting recursive bisections\n");
 	printf("Prints result in file %s\n",argv[2]);
 	FILE* file=fopen(argv[2],"w");
 	recurs(part, g, 0, file);
 	fclose(file);
-	t2=time(NULL);
-
-	printf("- Overall time = %ldh%ldm%lds\n",(t2-t1)/3600,((t2-t1)%3600)/60,((t2-t1)%60));
+	t3=time(NULL);
+	printf("- Time = %ldh%ldm%lds\n",(t3-t2)/3600,((t3-t2)%3600)/60,((t3-t2)%60));
+	printf("- Overall time = %ldh%ldm%lds\n",(t3-t0)/3600,((t3-t0)%3600)/60,((t3-t0)%60));
 
 	return 0;
 }
