@@ -28,7 +28,7 @@ adjlist* readedgelist(char* input){
 	g->edges=malloc(e1*sizeof(edge));
 	while (fscanf(file,"%lu %lu", &(g->edges[g->e].s), &(g->edges[g->e].t))==2) {
 		g->n=max3(g->n,g->edges[g->e].s,g->edges[g->e].t);
-		if (g->e++==e1) {
+		if (++(g->e)==e1) {
 			e1+=NLINKS;
 			g->edges=realloc(g->edges,e1*sizeof(edge));
 		}
@@ -131,7 +131,7 @@ adjlist** mkkids(adjlist* g, unsigned long* lab, unsigned long nlab){
 		if (lab[g->edges[j].s]==lab[g->edges[j].t]){
 			i=lab[g->edges[j].s];
 			clust[i]->edges[clust[i]->e]=g->edges[j];
-			if (clust[i]->e++==clust[i]->emax) {
+			if (++(clust[i]->e)==clust[i]->emax) {
 				clust[i]->emax*=2;
 				clust[i]->edges=realloc(clust[i]->edges,clust[i]->emax*sizeof(edge));
 			}
