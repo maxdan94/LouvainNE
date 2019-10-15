@@ -211,7 +211,7 @@ int main(int argc,char** argv){
 	unsigned long n;
 	unsigned long *map,*new;
 
-	time_t t0=time(NULL),t1,t2;
+	time_t t0=time(NULL),t1,t2,t3;
 	srand(time(NULL));
 
 	if (argc==3)
