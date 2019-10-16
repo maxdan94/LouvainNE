@@ -7,7 +7,7 @@
 #include "partition.h"
 #include "struct.h"
 
-#define NLINKS 100000 //maximum number of edges of the input graph: used for memory allocation, will increase if needed
+#define NLINKS 100000000 //maximum number of edges of the input graph: used for memory allocation, will increase if needed
 #define NLINKS2 8 //maximum number of edges of a subgraph: used for memory allocation, will increase if needed
 
 //compute the maximum of three unsigned long
