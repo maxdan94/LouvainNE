@@ -7,7 +7,7 @@
 #include "partition.h"
 #include "struct.h"
 
-#define NLINKS 1000000 //maximum number of edges of the input graph: used for memory allocation, will increase if needed
+#define NLINKS 100000 //maximum number of edges of the input graph: used for memory allocation, will increase if needed
 #define NLINKS2 8 //maximum number of edges of a subgraph: used for memory allocation, will increase if needed
 
 //compute the maximum of three unsigned long
@@ -49,7 +49,7 @@ unsigned long* relabel(adjlist* g){
 	bool *b=calloc(g->n,sizeof(bool));
 
 	g->map=malloc(g->n*sizeof(unsigned long));
-	g->n=0;///////////////
+	g->n=0;//////////////
 	for (i=0;i<g->e;i++) {
 		if (b[g->edges[i].s]==0){
 			b[g->edges[i].s]=1;
@@ -63,6 +63,8 @@ unsigned long* relabel(adjlist* g){
 		}
 	}
 	g->map=realloc(g->map,g->n*sizeof(unsigned long));
+	free(b);
+
 	return new;
 }
 
@@ -163,9 +165,14 @@ adjlist** mkkids(adjlist* g, unsigned long* lab, unsigned long nlab){
 		new[i]=(clust[j]->n)++;
 	}
 
+	//	printf("before mkadjlist\n");
+
 	for (i=0;i<nlab;i++){
 		mkadjlist(clust[i],new);
 	}
+
+	//	printf("after mkadjlist\n");
+
 	free(new);
 	return clust;
 }
@@ -175,6 +182,7 @@ adjlist** mkkids(adjlist* g, unsigned long* lab, unsigned long nlab){
 void recurs(partition part, adjlist* g, unsigned h, FILE* file){
 	unsigned long nlab;
 	unsigned long i;
+
 	if (g->e==0){
 		fprintf(file,"%u 1 %lu",h,g->n);
 		for (i=0;i<g->n;i++){
@@ -186,6 +194,10 @@ void recurs(partition part, adjlist* g, unsigned h, FILE* file){
 	else{
 		unsigned long *lab=malloc(g->n*sizeof(unsigned long));
 		nlab=part(g,lab);
+		if (h==0) {
+		  printf("First level finished, %lu parts\n", nlab);
+		}
+		  
 		if (nlab==1){
 			fprintf(file,"%u 1 %lu",h,g->n);
 			for (i=0;i<g->n;i++){
@@ -197,12 +209,16 @@ void recurs(partition part, adjlist* g, unsigned h, FILE* file){
 		}
 		else{
 			adjlist** clust=mkkids(g,lab,nlab);
+			if (h==0) {
+			  printf("First level subgraphs computed\n");
+			}
 			fprintf(file,"%u %lu\n",h,nlab);
 			free_adjlist(g);
 			free(lab);
 			for (i=0;i<nlab;i++){
 				recurs(part, clust[i],h+1,file);
 			}
+			free(clust);
 		}
 	}
 }

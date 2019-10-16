@@ -52,6 +52,51 @@ unsigned long * mySort(unsigned long *part, unsigned long size) {
 */
 
 
+inline long double degreeWeighted(adjlist *g, unsigned long node) {
+  unsigned long long i;
+  if (g->weights == NULL) {
+    return 1.*(g->cd[node + 1] - g->cd[node]);
+  }
+
+  long double res = 0.0L;
+  for (i = g->cd[node]; i < g->cd[node + 1]; i++) {
+    res += g->weights[i];
+  }
+  return res;
+}
+
+inline long double selfloopWeighted(adjlist *g, unsigned long node) {
+  unsigned long long i;
+
+  for (i = g->cd[node]; i < g->cd[node + 1]; i++) {
+    if (g->adj[i] == node) {
+      return (g->weights == NULL)?1.0:g->weights[i];
+    }
+  }
+
+  return 0.0;
+}
+
+inline void removeNode(louvainPartition *p, adjlist *g, unsigned long node, unsigned long comm, long double dnodecomm) {
+  p->in[comm]  -= 2.0L * dnodecomm + selfloopWeighted(g, node);
+  p->tot[comm] -= degreeWeighted(g, node);
+}
+
+inline void insertNode(louvainPartition *p, adjlist *g, unsigned long node, unsigned long comm, long double dnodecomm) {
+  p->in[comm]  += 2.0L * dnodecomm + selfloopWeighted(g, node);
+  p->tot[comm] += degreeWeighted(g, node);
+  
+  p->node2Community[node] = comm;
+}
+
+inline long double gain(louvainPartition *p, adjlist *g, unsigned long comm, long double dnc, long double degc) {
+  long double totc = p->tot[comm];
+  long double m2   = g->totalWeight;
+  
+  return (dnc - totc*degc/m2);
+}
+
+
 
 void freeLouvainPartition(louvainPartition *p) {
   free(p->in);
@@ -119,7 +164,7 @@ void neighCommunities(louvainPartition *p, adjlist *g, unsigned long node) {
   long double neighW;
   p->neighCommPos[0] = p->node2Community[node];
   p->neighCommWeights[p->neighCommPos[0]] = 0.;
-  p->neighCommNb = 0;
+  p->neighCommNb = 1;
 
   // for all neighbors of node, add weight to the corresponding community
   for (i = g->cd[node]; i < g->cd[node + 1]; i++) {
@@ -232,7 +277,7 @@ long double louvainOneLevel(louvainPartition *p, adjlist *g) {
 
       // remove node from its current community
       removeNode(p, g, node, oldComm, p->neighCommWeights[oldComm]);
-
+      //      printf("remove %lu from %lu\n", node, oldComm);
 
       // compute the gain for all neighboring communities
       // default choice is the former community
@@ -243,6 +288,8 @@ long double louvainOneLevel(louvainPartition *p, adjlist *g) {
 	newComm = p->neighCommPos[j];
 	newGain = gain(p, g, newComm, p->neighCommWeights[newComm], degreeW);
 
+	//printf("try %lu %lu in %lu : %Lf\n", j, node, newComm, newGain);
+
 	if (newGain > bestGain) {
 	  bestComm = newComm;
 	  bestCommW = p->neighCommWeights[newComm];
@@ -252,6 +299,7 @@ long double louvainOneLevel(louvainPartition *p, adjlist *g) {
 
       // insert node in the nearest community
       insertNode(p, g, node, bestComm, bestCommW);
+      // printf("insert %lu to %lu\n", node, bestComm);
 
       if (bestComm != oldComm) {
 	nbMoves++;
