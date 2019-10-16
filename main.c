@@ -7,7 +7,7 @@
 #include "partition.h"
 #include "struct.h"
 
-#define NLINKS 100000000 //maximum number of edges of the input graph: used for memory allocation, will increase if needed
+#define NLINKS 1000000 //maximum number of edges of the input graph: used for memory allocation, will increase if needed
 #define NLINKS2 8 //maximum number of edges of a subgraph: used for memory allocation, will increase if needed
 
 //compute the maximum of three unsigned long
@@ -99,6 +99,9 @@ void mkadjlist(adjlist* g,unsigned long* new){
 		g->adj[ g->cd[v] + d[v]++ ]=u;
 	}
 
+	g->weights = NULL;
+	g->totalWeight = 2*g->e;
+
 	free(d);
 }
 
@@ -109,6 +112,7 @@ void free_adjlist(adjlist *g){
 	free(g->edges);
 	free(g->cd);
 	free(g->adj);
+	free(g->weights);
 	free(g->map);
 	free(g);
 }
@@ -215,7 +219,7 @@ int main(int argc,char** argv){
 	srand(time(NULL));
 
 	if (argc==3)
-		part=choose_partition("0");
+		part=choose_partition("1");
 	else if (argc==4)
 		part=choose_partition(argv[3]);
 	else{
@@ -225,8 +229,10 @@ int main(int argc,char** argv){
 
 	printf("Reading edgelist from file %s\n",argv[1]);
 	g=readedgelist(argv[1]);
+
 	t1=time(NULL);
 	printf("- Time = %ldh%ldm%lds\n",(t1-t0)/3600,((t1-t0)%3600)/60,((t1-t0)%60));
+
 	printf("Building adjacency array\n");
 	new=relabel(g);
 	mkadjlist(g,new);
@@ -235,14 +241,16 @@ int main(int argc,char** argv){
 
 	printf("Number of nodes: %lu\n",g->n);
 	printf("Number of edges: %llu\n",g->e);
+
 	t2=time(NULL);
 	printf("- Time = %ldh%ldm%lds\n",(t2-t1)/3600,((t2-t1)%3600)/60,((t2-t1)%60));
-	
+
 	printf("Starting recursive bisections\n");
 	printf("Prints result in file %s\n",argv[2]);
 	FILE* file=fopen(argv[2],"w");
 	recurs(part, g, 0, file);
 	fclose(file);
+
 	t3=time(NULL);
 	printf("- Time = %ldh%ldm%lds\n",(t3-t2)/3600,((t3-t2)%3600)/60,((t3-t2)%60));
 	printf("- Overall time = %ldh%ldm%lds\n",(t3-t0)/3600,((t3-t0)%3600)/60,((t3-t0)%60));

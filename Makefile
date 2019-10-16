@@ -1,6 +1,5 @@
 CC=gcc
-CFLAGS=-O9
-LDFLAGS=
+CFLAGS=-O3
 EXEC=main
 
 all: $(EXEC)
