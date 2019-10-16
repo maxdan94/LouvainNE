@@ -128,7 +128,7 @@ adjlist** mkkids(adjlist* g, unsigned long* lab, unsigned long nlab){
 	adjlist** clust=malloc(nlab*sizeof(adjlist*));
 	for (i=0;i<nlab;i++){
 		clust[i]=malloc(sizeof(adjlist));
-		clust[i]->edges=malloc(NLINKS*sizeof(edge));
+		clust[i]->edges=malloc(NLINKS2*sizeof(edge));
 		clust[i]->e=0;
 		clust[i]->emax=NLINKS2;
 	}
