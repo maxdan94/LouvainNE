@@ -15,7 +15,7 @@ Feel free to use these lines as you wish.
 
 option "partition": the bisection algorithm to use, default is 0.
 - 0: random bisection
-- 1: Louvain partition
+- 1: Louvain partition  
 Default is 1
 
 ## Initial contributors:
