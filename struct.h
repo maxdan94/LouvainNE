@@ -6,6 +6,17 @@ typedef struct {
 	unsigned long t;
 } edge;
 
+
+//edge list structure:
+typedef struct {
+  unsigned long n;//number of nodes
+  unsigned long long e;//number of edges
+  unsigned long long emax;//max number of edges
+  edge *edges;//list of edges
+  unsigned long *map;//map[u]=original label of node u
+} edgelist;
+
+
 //edge list structure:
 typedef struct {
   unsigned long n;//number of nodes
