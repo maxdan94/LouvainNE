@@ -16,9 +16,10 @@ Feel free to use these lines as you wish.
 option "partition": the bisection algorithm to use, default is 0.
 - 0: random bisection
 - 1: Louvain partition  
+- 2: Louvain first-level partition
 Default is 1
 
-## Initial contributors:
+## Initial contributors:  
 Jean-Loup Guillaume and Maximilien Danisch  
 September 2019  
 http://bit.ly/danisch  
