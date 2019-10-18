@@ -1,4 +1,3 @@
-
 ## Info:
 
 Feel free to use these lines as you wish.
@@ -13,11 +12,10 @@ Feel free to use these lines as you wish.
 - "edgelist.txt" should contain an undirected unweighted graph: one edge on each line (two unsigned long (nodes' ID)) separated by a space.
 - "res.txt": will contain the resulting tree.
 
-option "partition": the bisection algorithm to use, default is 0.
+option "partition": the bisection algorithm to use, default is 1.
 - 0: random bisection
 - 1: Louvain partition  
 - 2: Louvain first-level partition  
-Default is 1
 
 ## Initial contributors:  
 Jean-Loup Guillaume and Maximilien Danisch  
