@@ -213,14 +213,12 @@ adjlist** mkkids(adjlist* g, unsigned long* lab, unsigned long nlab){
 	return clust;
 }
 
-
 //recursive function
 void recurs(partition part, adjlist* g, unsigned h, FILE* file){
 	unsigned long nlab;
 	unsigned long i;
 
 	if (g->e==0){
-		fprintf(file,"%u 1 %lu",h,g->n);
 		for (i=0;i<g->n;i++){
 			fprintf(file," %lu",g->map[i]);
 		}

@@ -17,6 +17,8 @@ unsigned long init(adjlist *g,unsigned long *lab);
 
 unsigned long louvain(adjlist *g, unsigned long *lab);
 
+unsigned long louvainComplete(adjlist *g, unsigned long *lab);
+
 // -----------------------------------------------------------
 // START Louvain utility functions
 
@@ -107,7 +109,7 @@ void neighCommunities(louvainPartition *p, adjlist *g, unsigned long node);
 unsigned long updateGraphPartition(partition *p, unsigned long *part, unsigned long size);
 
 // generates the binary graph of communities as computed by one_level
-adjlist * partition2Graph(louvainPartition *p, adjlist *g);
+adjlist* louvainPartition2Graph(louvainPartition *p, adjlist *g);
 
 /**
     Computes one level of Louvain (iterations over all nodes until no improvement
