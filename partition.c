@@ -22,12 +22,12 @@ partition choose_partition(char *c){
 		return init;
 	}
 	if (strcmp(c,"1")==0){
-		printf("Louvain first-level partition\n");
-		return louvain;
+		printf("Louvain partition\n");
+		return louvainComplete;
 	}
 	if (strcmp(c,"2")==0){
-		printf("Louvain multi-level partition\n");
-		return louvainComplete;
+		printf("Louvain first-level partition\n");
+		return louvain;
 	}
 	printf("unknown\n");
 	exit(1);
@@ -49,9 +49,7 @@ unsigned long * mySort(unsigned long *part, unsigned long size) {
   for (i = 0; i < size; i++) {
     nodes[i]=i;
   }
-
   qsort_r(nodes, size, sizeof(unsigned long), myCompare, (void *)part);
-
   return nodes;
 }
 

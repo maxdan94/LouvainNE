@@ -7,7 +7,7 @@ all: $(EXEC)
 main: partition.o main.o
 	$(CC) -o recpart partition.o main.o $(CFLAGS)
 
-bisection.o: partition.c
+partition.o: partition.c
 	$(CC) -o partition.o -c partition.c $(CFLAGS)
 
 main.o: main.c

@@ -1,6 +1,8 @@
 #ifndef PARTITION_H
 #define PARTITION_H
 
+#define _GNU_SOURCE
+
 #include "struct.h"
 #include <stdbool.h>
 #include <stdlib.h>
@@ -57,7 +59,7 @@ typedef struct {
 
 unsigned long louvain(adjlist *g,unsigned long *lab);
 
-inline long double degreeWeighted(adjlist *g, unsigned long node);
+//inline long double degreeWeighted(adjlist *g, unsigned long node);
 
 
 /**
@@ -68,7 +70,7 @@ inline long double degreeWeighted(adjlist *g, unsigned long node);
     @param node The node whose self-loop weight must be calculated
     @return the self-loop weight
 */
-inline long double selfloopWeighted(adjlist *g, unsigned long node);
+//inline long double selfloopWeighted(adjlist *g, unsigned long node);
 
 /**
     Frees a louvain partition and all pointers attached to it
@@ -140,7 +142,7 @@ unsigned long louvain(adjlist *g, unsigned long *part);
     @param dnodecomm The weighted degree from node to comm
     @return nothing
 */
-inline void removeNode(louvainPartition *p, adjlist *g, unsigned long node, unsigned long comm, long double dnodecomm);
+//inline void removeNode(louvainPartition *p, adjlist *g, unsigned long node, unsigned long comm, long double dnodecomm);
 
 /**
     Adds a node to a community and update modularity
@@ -152,7 +154,7 @@ inline void removeNode(louvainPartition *p, adjlist *g, unsigned long node, unsi
     @param dnodecomm The weighted degree from node to comm
     @return nothing
 */
-inline void insertNode(louvainPartition *p, adjlist *g, unsigned long node, unsigned long comm, long double dnodecomm);
+//inline void insertNode(louvainPartition *p, adjlist *g, unsigned long node, unsigned long comm, long double dnodecomm);
 
 /**
     Computes the increase of modularity if a node where to be added to a given community
@@ -166,7 +168,7 @@ inline void insertNode(louvainPartition *p, adjlist *g, unsigned long node, unsi
     @param nodeDegree The weighted degree of the node
     @return nothing
 */
-inline long double gain(louvainPartition *p, adjlist *g, unsigned long comm, long double dnodecomm, long double nodeDegree);
+//inline long double gain(louvainPartition *p, adjlist *g, unsigned long comm, long double dnodecomm, long double nodeDegree);
 
 // END Louvain utility functions
 // -----------------------------------------------------------
