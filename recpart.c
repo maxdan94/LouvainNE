@@ -219,12 +219,18 @@ adjlist** mkkids(adjlist* g, unsigned long* lab, unsigned long nlab){
 
 //recursive function
 void recurs(partition part, adjlist* g, unsigned h, FILE* file){
+	time_t t0,t1,t2;
 	unsigned long nlab;
 	unsigned long i;
 	static unsigned long *lab=NULL;
 	if (lab==NULL){
 		lab=malloc(g->n*sizeof(unsigned long));
 	}
+
+	if (h==0){
+		t0=time(NULL);
+	}
+
 
 	if (g->e==0){
 		fprintf(file,"%u 1 %lu",h,g->n);
@@ -237,7 +243,9 @@ void recurs(partition part, adjlist* g, unsigned h, FILE* file){
 	else{
 		nlab=part(g,lab);
 		if (h==0) {
-		  printf("First level finished, %lu parts\n", nlab);
+			t1=time(NULL);
+			printf("First level partition computed: %lu parts\n", nlab);
+			printf("- Time to compute first level partition = %ldh%ldm%lds\n",(t1-t0)/3600,((t1-t0)%3600)/60,((t1-t0)%60));
 		}
 		  
 		if (nlab==1){
@@ -251,7 +259,8 @@ void recurs(partition part, adjlist* g, unsigned h, FILE* file){
 		else{
 			adjlist** clust=mkkids(g,lab,nlab);
 			if (h==0) {
-			  printf("First level subgraphs computed\n");
+				t2=time(NULL);
+				printf("- Time to build first level subgraphs = %ldh%ldm%lds\n",(t2-t1)/3600,((t2-t1)%3600)/60,((t2-t1)%60));
 			}
 			fprintf(file,"%u %lu\n",h,nlab);
 			free_adjlist(g);
@@ -303,7 +312,7 @@ int main(int argc,char** argv){
 	*/
 
 	t1=time(NULL);
-	printf("- Time = %ldh%ldm%lds\n",(t1-t0)/3600,((t1-t0)%3600)/60,((t1-t0)%60));
+	printf("- Time to load the graph = %ldh%ldm%lds\n",(t1-t0)/3600,((t1-t0)%3600)/60,((t1-t0)%60));
 
 	printf("Starting recursive bisections\n");
 	printf("Prints result in file %s\n",argv[2]);
@@ -312,7 +321,7 @@ int main(int argc,char** argv){
 	fclose(file);
 
 	t2=time(NULL);
-	printf("- Time = %ldh%ldm%lds\n",(t2-t1)/3600,((t2-t1)%3600)/60,((t2-t1)%60));
+	printf("- Time to compute the hierarchy = %ldh%ldm%lds\n",(t2-t1)/3600,((t2-t1)%3600)/60,((t2-t1)%60));
 	printf("- Overall time = %ldh%ldm%lds\n",(t2-t0)/3600,((t2-t0)%3600)/60,((t2-t0)%60));
 
 	return 0;
