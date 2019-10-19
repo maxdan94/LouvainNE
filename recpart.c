@@ -227,6 +227,7 @@ void recurs(partition part, adjlist* g, unsigned h, FILE* file){
 	}
 
 	if (g->e==0){
+		fprintf(file,"%u 1 %lu",h,g->n);
 		for (i=0;i<g->n;i++){
 			fprintf(file," %lu",g->map[i]);
 		}
