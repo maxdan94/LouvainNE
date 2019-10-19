@@ -80,7 +80,7 @@ int main(int argc,char** argv){
 
 	printf("Reading hierarchy from file: %s\n",argv[3]);
 	file1=fopen(argv[3],"r");
-	printf("Writting vectors to file: %s\n",argv[4]);
+	printf("Writing vectors to file: %s\n",argv[4]);
 	file2=fopen(argv[4],"w");
 
 	recvec(file1, file2, k, a, NULL);
