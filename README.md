@@ -22,13 +22,13 @@ option "partition": the bisection algorithm to use, default is 1.
 - 3: Label Propagation partition
 
 Format of "hierarchy.txt":
-- "h c" on each line, where "h" is the deapth of the associated tree's node and "c" is its number of children.
+- "h c" on each line, where "h" is the depth of the associated tree's node and "c" is its number of children.
 - If "c" is one, then the line is of the form "h 1 n node_1 node_2 ... node_n", where "n" is the number of nodes (nodes of the input graph) in that tree's leaf and "node_1 node_2 ... node_n" are the IDs of these "n" nodes.
 
 ### hi2vec:
 
 "./hi2vec k a hierarchy.txt vectors.txt"
-- "k" is the wished number of dimessions of the output vectors
+- "k" is the wished number of dimensions of the output vectors
 - "a" is the damping parameter (a=0.01 is a good default value)
 - "hierarchy.txt" should contain the input hierarchy in the format described above.
 - "vectors.txt" will contain a vector for each node in the graph in the foorm "u v_1 v_2 ... v_k" on each line, where "u" is the ID of a node and "v_1 v_2 ... v_k" are the "k" values of the associated vector.
