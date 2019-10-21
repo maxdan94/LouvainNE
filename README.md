@@ -12,7 +12,7 @@ type "make"
 ### recpart:
 
 "./recpart edgelist.txt hierarchy.txt [partition]"
-- "edgelist.txt" should contain an undirected unweighted graph: one edge on each line (two unsigned long (ID of the 2 nodes)) separated by a space.
+- "edgelist.txt" should contain an undirected unweighted graph: one edge on each line (two unsigned long (ID of the 2 nodes) separated by a space).
 - "hierarchy.txt": will contain the resulting tree.
 
 option "partition": the bisection algorithm to use, default is 1.
@@ -37,8 +37,8 @@ Format of "hierarchy.txt":
 In order to perform a non-mandatory pre-processing step that consists to re-number the nodes from 0 to n-1, where n is the number of nodes of degree one or more in the input graph (that is nodes that belong to at least one edge).
 
 "./renum input_edgelist.txt output_edgelist.txt map.txt"
-- "input_edgelist.txt" should contain an undirected unweighted graph: one edge on each line (two unsigned long (ID of the 2 nodes)) separated by a space.
-- "output_edgelist.txt" will contain the resulting renumbered undirected unweighted graph: one edge on each line (two unsigned long (ID of the 2 nodes)) separated by a space.
+- "input_edgelist.txt" should contain an undirected unweighted graph: one edge on each line (two unsigned long (ID of the 2 nodes) separated by a space).
+- "output_edgelist.txt" will contain the resulting renumbered undirected unweighted graph: one edge on each line (two unsigned long (ID of the 2 nodes) separated by a space).
 - "map.txt" will contain the matching "new_label old_label" on each line.
 
 ## Initial contributors:  
