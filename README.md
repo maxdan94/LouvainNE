@@ -1,6 +1,7 @@
 ## Reference:
 
-LouvainNE: Hierarchical Louvain Method for High Quality and Scalable Network Embedding. WSDM2020.
+LouvainNE: Hierarchical Louvain Method for High Quality and Scalable Network Embedding.  
+WSDM2020.
 
 ## To compile:
 
