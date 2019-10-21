@@ -19,6 +19,7 @@ option "partition": the bisection algorithm to use, default is 1.
 - 0: random bisection
 - 1: Louvain partition  
 - 2: Louvain first-level partition  
+- 3: Label Propagation partition
 
 Format of "hierarchy.txt":
 - "h c" on each line, where "h" is the deapth of the associated tree's node and "c" is its number of children.
