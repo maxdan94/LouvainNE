@@ -29,6 +29,10 @@ partition choose_partition(char *c){
 		printf("Louvain first-level partition\n");
 		return louvain;
 	}
+	if (strcmp(c,"3")==0){
+		printf("Label propagation partition\n");
+		return louvain;
+	}
 	printf("unknown\n");
 	exit(1);
 }
@@ -497,4 +501,90 @@ unsigned long louvainComplete(adjlist *g, unsigned long *lab) {
 
 // END Louvain utility functions
 // -----------------------------------------------------------
+// START Label propagation utility functions
+
+
+//https://en.wikipedia.org/wiki/Fisher-Yates_shuffle
+void shuff(unsigned long n, unsigned long *tab){
+	unsigned long i,j,tmp;
+	for (i=n-1;i>1;i--){
+     		j=rand()%i;
+		tmp=tab[i];
+		tab[i]=tab[j];
+		tab[j]=tmp;
+	}
+}
+
+unsigned long labprop(adjlist *g,unsigned long *lab) {
+	unsigned long n=g->n,i,j,u,nl,nmax,l,lmax,nlab;
+	bool b;
+	static unsigned long *tab=NULL,*list=NULL,*nodes=NULL,*new;
+
+	if (tab==NULL){
+		nmax=0;
+		for (i=0;i<n;i++){
+			nmax = (nmax > g->cd[i+1]-g->cd[i]) ? nmax : g->cd[i+1]-g->cd[i];
+		}
+		tab=calloc(nmax,sizeof(unsigned long));
+		list=malloc(nmax*sizeof(unsigned long));
+		nodes=malloc(n*sizeof(unsigned long));
+		new=malloc(n*sizeof(unsigned long));
+	}
+
+	for (i=0;i<n;i++) {
+		lab[i]=i;
+		nodes[i]=i;
+		new[i]=-1;
+	}
+
+	do {
+		b=0;
+		shuff(n,nodes);/////////
+		for (i=0;i<n;i++) {
+			u=nodes[i];
+			nl=0;
+			for (j=g->cd[u];j<g->cd[u+1];j++) {
+				l=lab[g->adj[j]];
+				if (tab[l]++==0){
+					list[nl++]=l;
+				}
+			}
+			lmax=lab[u];
+			nmax=tab[lmax];
+			shuff(nl,list);/////////
+			for (j=0;j<nl;j++){
+				l=list[j];
+				if (tab[l]>nmax){
+					lmax=l;
+					nmax=tab[l];
+					b=1;
+				}
+				tab[l]=0;
+			}
+			lab[u]=lmax;
+		}
+	} while(b);
+
+	nlab=0;
+	for (i=0;i<n;i++) {
+		l=lab[i];
+		if (new[l]==-1){
+			new[l]=nlab++;
+		}
+		lab[i]=new[l];
+	}
+
+	return nlab;
+}
+
+
+
+
+
+// END Label propagation utility functions
+// -----------------------------------------------------------
+
+
+
+
 

@@ -172,6 +172,13 @@ unsigned long louvain(adjlist *g, unsigned long *part);
 
 // END Louvain utility functions
 // -----------------------------------------------------------
+// START Label propagation utility functions
+
+void shuff(unsigned long, unsigned long*);
+unsigned long labprop(adjlist*,unsigned long*);
+
+// END Label propagation utility functions
+// -----------------------------------------------------------
 
 
 #endif
