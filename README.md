@@ -4,7 +4,7 @@ LouvainNE: Hierarchical Louvain Method for High Quality and Scalable Network Emb
 
 ## To compile:
 
-"make"
+type "make"
 
 ## To execute:
 
