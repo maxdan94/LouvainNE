@@ -142,6 +142,139 @@ adjlist* readadjlist(char* input){
 	return g;
 }
 
+//reading the list of edges and building the adjacency array
+#define BUFFER_SIZE (16 * 1024)
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <fcntl.h>
+#include <unistd.h>
+adjlist* readadjlist_v2(char* input){
+	unsigned long n1=NNODES,n2,u,v,i;
+	unsigned long *d=calloc(n1,sizeof(unsigned long));
+	adjlist *g=malloc(sizeof(adjlist));
+	FILE *file;
+
+	g->n=0;
+	g->e=0;
+
+	int fd = open (input, O_RDONLY);
+	posix_fadvise (fd, 0, 0, POSIX_FADV_SEQUENTIAL);
+
+	char buf[BUFFER_SIZE];
+	ssize_t how_many = 0;
+	unsigned long node_number=0;
+	int readu=0;
+
+  	while (1) {
+	  how_many = read (fd, buf, BUFFER_SIZE);
+	  if (how_many == 0) {
+	    if(readu==1) {
+	      v = node_number;
+
+	      g->e++;
+	      g->n=max3(g->n,u,v);
+	      if (g->n+1>=n1) {
+		n2=g->n+NNODES;
+		d=realloc(d,n2*sizeof(unsigned long));
+		bzero(d+n1,(n2-n1)*sizeof(unsigned long));
+		n1=n2;
+	      }
+	      d[u]++;
+	      d[v]++;
+
+	      node_number = 0;
+	    }	    
+	    break;
+	  }
+	  for (i = 0; i < how_many; i++) {
+	    if (buf[i] == ' ') {
+	      u = node_number;
+	      readu=1;
+	      node_number = 0;
+	    } else if (buf[i] == '\n') {
+	      v = node_number;
+
+	      g->e++;
+	      g->n=max3(g->n,u,v);
+	      if (g->n+1>=n1) {
+		n2=g->n+NNODES;
+		d=realloc(d,n2*sizeof(unsigned long));
+		bzero(d+n1,(n2-n1)*sizeof(unsigned long));
+		n1=n2;
+	      }
+	      d[u]++;
+	      d[v]++;
+
+	      node_number = 0;
+	      readu=0;
+	    } else {
+	      node_number = node_number * 10 + buf[i] - '0';
+	    }
+	  }
+
+	}
+	close(fd);
+
+
+	g->n++;
+	d=realloc(d,g->n*sizeof(unsigned long));
+
+	g->cd=malloc((g->n+1)*sizeof(unsigned long long));
+	g->cd[0]=0;
+	for (i=1;i<g->n+1;i++) {
+		g->cd[i]=g->cd[i-1]+d[i-1];
+		d[i-1]=0;
+	}
+
+	g->adj=malloc(2*g->e*sizeof(unsigned long));
+
+
+
+	fd = open (input, O_RDONLY);
+	posix_fadvise (fd, 0, 0, POSIX_FADV_SEQUENTIAL);
+	node_number=0;
+	readu=0;
+  	while (1) {
+	  how_many = read (fd, buf, BUFFER_SIZE);
+	  if (how_many == 0) {
+	    if(readu==1) {
+	      g->adj[ g->cd[u] + d[u]++ ]=v;
+	      g->adj[ g->cd[v] + d[v]++ ]=u;
+	    }
+	    break;
+	  }
+	  for (i = 0; i < how_many; i++) {
+	    if (buf[i] == ' ') {
+	      u = node_number;
+	      readu=1;
+	      node_number = 0;
+	    } else if (buf[i] == '\n') {
+	      v = node_number;
+
+	      g->adj[ g->cd[u] + d[u]++ ]=v;
+	      g->adj[ g->cd[v] + d[v]++ ]=u;
+
+	      readu=0;
+	      node_number = 0;
+	    } else {
+	      node_number = node_number * 10 + buf[i] - '0';
+	    }
+	  }
+
+	}
+	close(fd);
+
+
+	g->weights = NULL;
+	g->totalWeight = 2*g->e;
+	g->map=NULL;
+
+	free(d);
+
+	return g;
+}
+
 //freeing memory
 void free_adjlist(adjlist *g){
 	free(g->cd);
