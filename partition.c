@@ -442,7 +442,7 @@ unsigned long louvain(adjlist *g, unsigned long *lab) {
 }
 
 unsigned long louvainComplete(adjlist *g, unsigned long *lab) {
-  adjlist *init = g;
+  adjlist *init = g, *g2;
   unsigned long n, i;
   unsigned long long j;
   unsigned long originalSize = g->n;
@@ -465,24 +465,7 @@ unsigned long louvainComplete(adjlist *g, unsigned long *lab) {
       break;
     }
     
-    adjlist *g2 = louvainPartition2Graph(gp, g);
-
-    /*
-    for (i = 0; i < g2->n; i++) {
-      printf("%lu ", i);
-      for (j = g2->cd[i]; j<g2->cd[i+1];j++) {
-	printf("%lu / %Lf ", g2->adj[j], g2->weights[j]);
-      }
-      printf("\n");
-    }
-    printf("\n");
-
-    printf("%d - ", n);
-    for (i = 0; i < originalSize; i++) {
-      printf("%lu ", lab[i]);
-    }
-    printf("\n");
-    */
+    g2 = louvainPartition2Graph(gp, g);
 
     // free all graphs except the original one
 
@@ -492,6 +475,10 @@ unsigned long louvainComplete(adjlist *g, unsigned long *lab) {
     freeLouvainPartition(gp);
     g = g2;
 
+  }
+
+  if (g->n < originalSize) {
+    free_adjlist2(g);
   }
 
   return n;
