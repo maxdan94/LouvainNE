@@ -155,7 +155,7 @@ void free_adjlist(adjlist *g){
 adjlist** mkkids(adjlist* g, unsigned long* lab, unsigned long nlab){
 	unsigned long i,li,k;
 	unsigned long long j;
-	unsigned long *new=NULL;
+	static unsigned long *new=NULL;
 
 	if (new==NULL){
 		new=malloc(g->n*sizeof(unsigned long));
