@@ -15,7 +15,7 @@ type "make"
 - "edgelist.txt" should contain an undirected unweighted graph: one edge on each line (two unsigned long (ID of the 2 nodes) separated by a space).
 - "hierarchy.txt": will contain the resulting tree.
 
-option "partition": the bisection algorithm to use, default is 1.
+option "partition": the partition algorithm to use, default is 1.
 - 0: random bisection
 - 1: Louvain partition  
 - 2: Louvain first-level partition  
