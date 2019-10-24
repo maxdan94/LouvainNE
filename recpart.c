@@ -285,7 +285,7 @@ void free_adjlist(adjlist *g){
 }
 
 //Make the nlab subgraphs of graph g using the labels "lab"
-adjlist** mkkids(adjlist* g, unsigned long* lab, unsigned long nlab){
+adjlist** mkchildren(adjlist* g, unsigned long* lab, unsigned long nlab){
 	unsigned long i,li,k;
 	unsigned long long j;
 	static unsigned long *new=NULL;
@@ -349,6 +349,87 @@ adjlist** mkkids(adjlist* g, unsigned long* lab, unsigned long nlab){
 	return clust;
 }
 
+
+//Make the nlab subgraphs of graph g using the labels "lab". Make the subgraphs ne by one...
+//NOT USED IN THE CURRENT VERSION
+adjlist* mkchild(adjlist* g, unsigned long* lab, unsigned long nlab, unsigned h, unsigned long clab){
+	unsigned long i,u,v,lu;
+	unsigned long long j,k,tmp;
+	static unsigned long **nodes=NULL;
+	static unsigned long **new=NULL;
+	static unsigned long long **cd=NULL;
+	static unsigned long long **e=NULL;
+	static unsigned long *d=NULL;
+	adjlist* sg;
+
+	if (nodes==NULL){
+		nodes=malloc(g->n*sizeof(unsigned long *));//use hmax=HMAX=100 instead of g->n and increase if needed
+		new=malloc(g->n*sizeof(unsigned long *));
+		cd=malloc(g->n*sizeof(unsigned long long *));
+		e=malloc(g->n*sizeof(unsigned long long *));
+	}
+
+	if (clab==0){
+		d=calloc(nlab,sizeof(unsigned long));
+		cd[h]=malloc((nlab+1)*sizeof(unsigned long long));
+		e[h]=calloc(nlab,sizeof(unsigned long long));
+		for (i=0;i<g->n;i++){
+			d[lab[i]]++;
+		}
+		cd[h][0]=0;
+		for (i=0;i<nlab;i++){
+			cd[h][i+1]=cd[h][i]+d[i];
+			d[i]=0;
+		}
+		nodes[h]=malloc(g->n*sizeof(unsigned long));
+		new[h]=malloc(g->n*sizeof(unsigned long));
+		for (u=0;u<g->n;u++){
+			lu=lab[u];
+			nodes[h][cd[h][lu]+d[lu]]=u;
+			new[h][u]=d[lu]++;
+			for (j=g->cd[u];j<g->cd[u+1];j++){
+				v=g->adj[j];
+				if (lu==lab[v]){
+					e[h][lu]++;
+				}
+			}
+		}
+		free(d);
+	}
+
+	sg=malloc(sizeof(adjlist));
+	sg->n=cd[h][clab+1]-cd[h][clab];
+	sg->e=e[h][clab]/2;
+	sg->cd=malloc((sg->n+1)*sizeof(unsigned long long));
+	sg->cd[0]=0;
+	sg->adj=malloc(2*sg->e*sizeof(unsigned long));
+	sg->map=malloc(sg->n*sizeof(unsigned long));
+	sg->weights = NULL;
+	sg->totalWeight = 2*sg->e;
+	tmp=0;
+	for (k=cd[h][clab];k<cd[h][clab+1];k++){
+		u=nodes[h][k];
+		sg->map[new[h][u]]=(g->map==NULL)?u:g->map[u];//new[h][u] is equal to i-cd[h][clab]...
+		for (j=g->cd[u];j<g->cd[u+1];j++){
+			v=g->adj[j];
+			if (clab==lab[v]){//clab is equal to lab[u]
+				sg->adj[tmp++]=new[h][v];
+			}
+		}
+		sg->cd[new[h][u]+1]=tmp;
+	}
+
+	if (clab==nlab-1){
+		free(nodes[h]);
+		free(new[h]);
+		free(cd[h]);
+		free(e[h]);
+	}
+
+	return sg;
+}
+
+
 //recursive function
 void recurs(partition part, adjlist* g, unsigned h, FILE* file){
 	time_t t0,t1,t2;
@@ -389,7 +470,7 @@ void recurs(partition part, adjlist* g, unsigned h, FILE* file){
 			free_adjlist(g);
 		}
 		else{
-			adjlist** clust=mkkids(g,lab,nlab);
+			adjlist** clust=mkchildren(g,lab,nlab);
 			if (h==0) {
 				t2=time(NULL);
 				printf("- Time to build first level subgraphs = %ldh%ldm%lds\n",(t2-t1)/3600,((t2-t1)%3600)/60,((t2-t1)%60));
