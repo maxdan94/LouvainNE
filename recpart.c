@@ -9,6 +9,7 @@
 
 #define NLINKS 100000000 //maximum number of edges of the input graph: used for memory allocation, will increase if needed. //NOT USED IN THE CURRENT VERSION
 #define NNODES 10000000 //maximum number of nodes in the input graph: used for memory allocation, will increase if needed
+#define HMAX 100 //maximum depth of the tree: used for memory allocation, will increase if needed
 
 //compute the maximum of three unsigned long
 inline unsigned long max3(unsigned long a,unsigned long b,unsigned long c){
@@ -355,18 +356,28 @@ adjlist** mkchildren(adjlist* g, unsigned long* lab, unsigned long nlab){
 adjlist* mkchild(adjlist* g, unsigned long* lab, unsigned long nlab, unsigned h, unsigned long clab){
 	unsigned long i,u,v,lu;
 	unsigned long long j,k,tmp;
-	static unsigned long **nodes=NULL;
-	static unsigned long **new=NULL;
-	static unsigned long long **cd=NULL;
-	static unsigned long long **e=NULL;
-	static unsigned long *d=NULL;
+
+	static unsigned hmax=0;
+	static unsigned long **nodes;
+	static unsigned long **new;
+	static unsigned long long **cd;
+	static unsigned long long **e;
+	static unsigned long *d;
 	adjlist* sg;
 
-	if (nodes==NULL){
-		nodes=malloc(g->n*sizeof(unsigned long *));//use hmax=HMAX=100 instead of g->n and increase if needed
-		new=malloc(g->n*sizeof(unsigned long *));
-		cd=malloc(g->n*sizeof(unsigned long long *));
-		e=malloc(g->n*sizeof(unsigned long long *));
+	if (hmax==0){
+		hmax=HMAX;
+		nodes=malloc(HMAX*sizeof(unsigned long *));
+		new=malloc(HMAX*sizeof(unsigned long *));
+		cd=malloc(HMAX*sizeof(unsigned long long *));
+		e=malloc(HMAX*sizeof(unsigned long long *));
+	}
+	if (h==hmax){
+		hmax+=HMAX;
+		nodes=realloc(nodes,hmax*sizeof(unsigned long *));
+		new=realloc(new,hmax*sizeof(unsigned long *));
+		cd=realloc(cd,hmax*sizeof(unsigned long long *));
+		e=realloc(e,hmax*sizeof(unsigned long long *));
 	}
 
 	if (clab==0){
