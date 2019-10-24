@@ -144,6 +144,7 @@ adjlist* readadjlist(char* input){
 }
 
 //reading the list of edges and building the adjacency array
+//NOT USED IN THE CURRENT VERSION
 #define BUFFER_SIZE (16 * 1024)
 #include <stdint.h>
 #include <stdio.h>
