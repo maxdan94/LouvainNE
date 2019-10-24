@@ -343,7 +343,7 @@ adjlist** mkkids(adjlist* g, unsigned long* lab, unsigned long nlab){
 		clust[i]->cd[clust[i]->n]=clust[i]->e;
 		clust[i]->e/=2;
 		clust[i]->weights = NULL;
-		clust[i]->totalWeight = 2*g->e;
+		clust[i]->totalWeight = 2*clust[i]->e;
 	}
 
 	return clust;
