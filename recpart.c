@@ -285,6 +285,7 @@ void free_adjlist(adjlist *g){
 }
 
 //Make the nlab subgraphs of graph g using the labels "lab"
+//NOT USED IN THE CURRENT VERSION
 adjlist** mkchildren(adjlist* g, unsigned long* lab, unsigned long nlab){
 	unsigned long i,li,k;
 	unsigned long long j;
@@ -351,7 +352,6 @@ adjlist** mkchildren(adjlist* g, unsigned long* lab, unsigned long nlab){
 
 
 //Make the nlab subgraphs of graph g using the labels "lab". Make the subgraphs ne by one...
-//NOT USED IN THE CURRENT VERSION
 adjlist* mkchild(adjlist* g, unsigned long* lab, unsigned long nlab, unsigned h, unsigned long clab){
 	unsigned long i,u,v,lu;
 	unsigned long long j,k,tmp;
@@ -435,7 +435,9 @@ void recurs(partition part, adjlist* g, unsigned h, FILE* file){
 	time_t t0,t1,t2;
 	unsigned long nlab;
 	unsigned long i;
+	adjlist* sg;
 	static unsigned long *lab=NULL;
+
 	if (lab==NULL){
 		lab=malloc(g->n*sizeof(unsigned long));
 	}
@@ -470,20 +472,16 @@ void recurs(partition part, adjlist* g, unsigned h, FILE* file){
 			free_adjlist(g);
 		}
 		else{
-			adjlist** clust=mkchildren(g,lab,nlab);
-			if (h==0) {
-				t2=time(NULL);
-				printf("- Time to build first level subgraphs = %ldh%ldm%lds\n",(t2-t1)/3600,((t2-t1)%3600)/60,((t2-t1)%60));
-			}
 			fprintf(file,"%u %lu\n",h,nlab);
-			free_adjlist(g);
 			for (i=0;i<nlab;i++){
-				recurs(part, clust[i],h+1,file);
+				sg=mkchild(g,lab,nlab,h,i);
+				recurs(part,sg,h+1,file);
 			}
-			free(clust);
+			free_adjlist(g);
 		}
 	}
 }
+
 
 
 //main function
