@@ -448,11 +448,7 @@ void recurs(partition part, adjlist* g, unsigned h, FILE* file){
 	unsigned long nlab;
 	unsigned long i;
 	adjlist* sg;
-	static unsigned long *lab=NULL;
-
-	if (lab==NULL){
-		lab=malloc(g->n*sizeof(unsigned long));
-	}
+	unsigned long *lab;
 
 	if (h==0){
 		t0=time(NULL);
@@ -468,20 +464,19 @@ void recurs(partition part, adjlist* g, unsigned h, FILE* file){
 		free_adjlist(g);
 	}
 	else{
+		lab=malloc(g->n*sizeof(unsigned long));
 		nlab=part(g,lab);
 		if (h==0) {
 			t1=time(NULL);
 			printf("First level partition computed: %lu parts\n", nlab);
 			printf("- Time to compute first level partition = %ldh%ldm%lds\n",(t1-t0)/3600,((t1-t0)%3600)/60,((t1-t0)%60));
 		}
-		  
 		if (nlab==1){
 			fprintf(file,"%u 1 %lu",h,g->n);
 			for (i=0;i<g->n;i++){
 				fprintf(file," %lu",g->map[i]);
 			}
 			fprintf(file,"\n");
-			free_adjlist(g);
 		}
 		else{
 			fprintf(file,"%u %lu\n",h,nlab);
@@ -489,8 +484,9 @@ void recurs(partition part, adjlist* g, unsigned h, FILE* file){
 				sg=mkchild(g,lab,nlab,h,i);
 				recurs(part,sg,h+1,file);
 			}
-			free_adjlist(g);
 		}
+		free_adjlist(g);
+		free(lab);
 	}
 }
 
