@@ -1,5 +1,5 @@
 CC=gcc
-CFLAGS=-O3 -g
+CFLAGS=-O3
 EXEC=recpart hi2vec renum
 
 all: $(EXEC)
