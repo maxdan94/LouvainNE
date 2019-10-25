@@ -232,9 +232,9 @@ readadjlist_v2(char* input_filename){
   fd = open(input_filename, O_RDONLY);
   posix_fadvise(fd, 0, 0, POSIX_FADV_SEQUENTIAL);
   while (read_two_integers(fd, &u, &v) == 2) {
-    g->adj[g->cd[u]] = v;
+    g->adj[g->cd[u] + d[u]] = v;
     d[u]++;
-    g->adj[g->cd[v]] = u;
+    g->adj[g->cd[v] + d[v]] = u;
     d[v]++;
   }
   close(fd);
