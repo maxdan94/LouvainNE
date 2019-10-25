@@ -481,7 +481,7 @@ int main(int argc,char** argv){
   }
 
   printf("Reading edgelist from file %s and building adjacency array\n",argv[1]);
-  g=readadjlist_v2(argv[1]);
+  g=readadjlist(argv[1]);
   printf("Number of nodes: %lu\n",g->n);
   printf("Number of edges: %llu\n",g->e);
 
