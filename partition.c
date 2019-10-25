@@ -503,7 +503,8 @@ void shuff(unsigned long n, unsigned long *tab){
 }
 
 unsigned long labprop(adjlist *g,unsigned long *lab) {
-	unsigned long n=g->n,i,j,u,nl,l,lmax,nmax,nlab;
+	unsigned long n=g->n,i,u,nl,l,lmax,nmax,nlab;
+	unsigned long long j;
 	bool b;
 	static unsigned long *tab=NULL,*list=NULL,*nodes=NULL,*new=NULL;
 
