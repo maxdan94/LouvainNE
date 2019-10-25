@@ -503,17 +503,13 @@ void shuff(unsigned long n, unsigned long *tab){
 }
 
 unsigned long labprop(adjlist *g,unsigned long *lab) {
-	unsigned long n=g->n,i,j,u,nl,nmax,l,lmax,nlab;
+	unsigned long n=g->n,i,j,u,nl,l,lmax,nmax,nlab;
 	bool b;
-	static unsigned long *tab=NULL,*list=NULL,*nodes=NULL,*new;
+	static unsigned long *tab=NULL,*list=NULL,*nodes=NULL,*new=NULL;
 
 	if (tab==NULL){
-		nmax=0;
-		for (i=0;i<n;i++){
-			nmax = (nmax > g->cd[i+1]-g->cd[i]) ? nmax : g->cd[i+1]-g->cd[i];
-		}
-		tab=calloc(nmax,sizeof(unsigned long));
-		list=malloc(nmax*sizeof(unsigned long));
+		tab=calloc(n,sizeof(unsigned long));
+		list=malloc(n*sizeof(unsigned long));
 		nodes=malloc(n*sizeof(unsigned long));
 		new=malloc(n*sizeof(unsigned long));
 	}
@@ -538,7 +534,9 @@ unsigned long labprop(adjlist *g,unsigned long *lab) {
 			}
 			lmax=lab[u];
 			nmax=tab[lmax];
-			shuff(nl,list);/////////
+			if (nl>0){
+				shuff(nl,list);/////////
+			}
 			for (j=0;j<nl;j++){
 				l=list[j];
 				if (tab[l]>nmax){
