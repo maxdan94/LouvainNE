@@ -31,7 +31,7 @@ partition choose_partition(char *c){
 	}
 	if (strcmp(c,"3")==0){
 		printf("Label propagation partition\n");
-		return louvain;
+		return labprop;
 	}
 	printf("unknown\n");
 	exit(1);
