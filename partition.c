@@ -494,7 +494,7 @@ unsigned long louvainComplete(adjlist *g, unsigned long *lab) {
 //https://en.wikipedia.org/wiki/Fisher-Yates_shuffle
 void shuff(unsigned long n, unsigned long *tab){
 	unsigned long i,j,tmp;
-	for (i=n-1;i>1;i--){
+	for (i=n-1;i>0;i--){
      		j=rand()%i;
 		tmp=tab[i];
 		tab[i]=tab[j];
