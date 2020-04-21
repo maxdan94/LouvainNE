@@ -24,6 +24,7 @@ option "partition": the partition algorithm to use, default is 1.
 Format of "hierarchy.txt":
 - "h c" on each line, where "h" is the depth of the associated tree's node and "c" is its number of children.
 - If "c" is one, then the line is of the form "h 1 n node_1 node_2 ... node_n", where "n" is the number of nodes (nodes of the input graph) in that tree's leaf and "node_1 node_2 ... node_n" are the IDs of these "n" nodes.
+- The tree-nodes on each line are listed following a DFS ordering.
 
 ### hi2vec:
 
